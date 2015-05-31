@@ -8,7 +8,9 @@
 		<engine name="cordova" version=">=2.3.0" />
 	</engines>
 	
-    <asset src="www/screencapture.js" target="screencapture.js" />
+    <js-module src="www/screencapture.js" name="screencapture">
+        <clobbers target="screencapture" />
+    </js-module>
    
 
     <!-- android -->
@@ -25,12 +27,14 @@
     <platform name="ios">
 
         <!-- Cordova >= 2.3 -->
-        <config-file target="config.xml" parent="plugins">
-            <plugin name="ScreenCapture" value="CDVScreenCapture"/>
+        <config-file target="config.xml" parent="/*">
+            <feature name="ScreenCapture">
+                <param name="ios-package" value="CDVScreenCapture" />
+            </feature>
         </config-file>
 
-        <header-file src="CDVScreenCapture.h" />
-        <source-file src="CDVScreenCapture.m" />
+        <header-file src="src/ios/CDVScreenCapture.h" />
+        <source-file src="src/ios/CDVScreenCapture.m" />
         
     </platform>
 </plugin>

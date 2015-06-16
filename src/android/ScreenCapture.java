@@ -6,11 +6,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.apache.cordova.CordovaWebView;
-import org.apache.cordova.api.CallbackContext;
-import org.apache.cordova.api.CordovaInterface;
-import org.apache.cordova.api.CordovaPlugin;
-import org.apache.cordova.api.PluginResult;
+import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaInterface;
+import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -87,9 +86,7 @@ public class ScreenCapture extends CordovaPlugin {
         			mFileName = nameTemp;
         			mCaptureCount = 0;
         		}
-            	CordovaWebView uiThreadView = webView;
-            	//capturePicture writes the entire document into a picture object, this includes areas that aren't visible within the current view
-            	final Picture picture = uiThreadView.capturePicture();
+                final Picture picture = (Picture) webView;
             	final String fileName = mFileName+"_"+mCaptureCount;
             	mCaptureCount++;
             	

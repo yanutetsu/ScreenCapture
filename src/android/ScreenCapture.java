@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
@@ -86,7 +87,8 @@ public class ScreenCapture extends CordovaPlugin {
         			mFileName = nameTemp;
         			mCaptureCount = 0;
         		}
-                final Picture picture = (Picture) webView;
+                CordovaWebView uiThreadView = webView;
+                final Picture picture = uiThreadView.capturePicture();
             	final String fileName = mFileName+"_"+mCaptureCount;
             	mCaptureCount++;
             	

@@ -7,10 +7,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.apache.cordova.CordovaWebView;
-import org.apache.cordova.api.CallbackContext;
-import org.apache.cordova.api.CordovaInterface;
-import org.apache.cordova.api.CordovaPlugin;
-import org.apache.cordova.api.PluginResult;
+import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaInterface;
+import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,8 +18,8 @@ import org.json.JSONObject;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Picture;
 import android.graphics.Bitmap.CompressFormat;
+import android.webkit.WebView;
 
 import android.os.Environment;
 
@@ -87,9 +87,7 @@ public class ScreenCapture extends CordovaPlugin {
         			mFileName = nameTemp;
         			mCaptureCount = 0;
         		}
-            	CordovaWebView uiThreadView = webView;
-            	//capturePicture writes the entire document into a picture object, this includes areas that aren't visible within the current view
-            	final Picture picture = uiThreadView.capturePicture();
+                final WebView wb = (WebView) webView.getView();
             	final String fileName = mFileName+"_"+mCaptureCount;
             	mCaptureCount++;
             	
@@ -115,26 +113,26 @@ public class ScreenCapture extends CordovaPlugin {
         				 int[] internalPixels = new int[0];
         				 
         				 /**** Write Capture File Portion ****/
-    					//copy whole picture into a bitmap
-    					Bitmap bm = Bitmap.createBitmap(picture.getWidth(), picture.getHeight(), Bitmap.Config.ARGB_8888);
+    					//copy whole WebView into a bitmap
+    					Bitmap bm = Bitmap.createBitmap(wb.getWidth(), wb.getHeight(), Bitmap.Config.ARGB_8888);
     					Canvas c = new Canvas(bm);
-    					picture.draw(c);
+    					wb.draw(c);
     					
     					if(width > 0 && height > 0 && 
-    							width < picture.getWidth() &&
-    							height < picture.getHeight()) 
+    							width < wb.getWidth() &&
+    							height < wb.getHeight())
     					{
     						//clip to 0 if less than
     						x = (x < 0) ? 0 : x;
     						y = (y < 0) ? 0 : y;
     						//width and height > 0 means we want to sub rect
     						internalPixels = new int[width*height];
-    						bm.getPixels(internalPixels, 0, width, x, y, width, height);
-    						bm = Bitmap.createBitmap(internalPixels,width,height, Bitmap.Config.ARGB_8888);
+                            bm.getPixels(internalPixels, 0, width, x, y, width, height);
+                            bm = Bitmap.createScaledBitmap(bm, width, height, true);
     					}
     					else if(compareOptions != null) {
-    						int w = picture.getWidth();
-    						int h = picture.getHeight();
+    						int w = wb.getWidth();
+    						int h = wb.getHeight();
     						//no sub rect requested, but we want to do a compare so create the pixels
     						internalPixels = new int[w*h];
     						bm.getPixels(internalPixels, 0, w, x, y, w, h);

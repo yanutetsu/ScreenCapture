@@ -19,7 +19,9 @@
 
         <!-- Cordova >= 2.0.0 -->
         <config-file target="res/xml/config.xml" parent="plugins">
-            <plugin name="ScreenCapture" value="org.apache.cordova.plugin.ScreenCapture"/>
+            <feature name="ScreenCapture">
+                <param name="android-package" value="org.apache.cordova.plugin.ScreenCapture"/>
+            </feature>
         </config-file>
 
     </platform>
